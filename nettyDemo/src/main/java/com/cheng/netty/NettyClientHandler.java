@@ -16,7 +16,9 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     private ByteBuf requestBuffer;
 
     public NettyClientHandler() {
-        byte[] requestBytes = "你好，我发送第一个请求".getBytes();
+        //换行符，用于解决粘包拆包
+//        byte[] requestBytes = ("你好，我发送第一个请求"+System.getProperty("line.separator")).getBytes();
+        byte[] requestBytes = ("你好，我发送第一个请求$_").getBytes();
         requestBuffer = Unpooled.buffer(requestBytes.length);
         requestBuffer.writeBytes(requestBytes);
     }
@@ -31,11 +33,12 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
-        ByteBuf responseBuffer = (ByteBuf) msg;
-        byte[] responseBytes = new byte[responseBuffer.readableBytes()];
-        responseBuffer.readBytes(responseBytes);
+//        ByteBuf responseBuffer = (ByteBuf) msg;
+//        byte[] responseBytes = new byte[responseBuffer.readableBytes()];
+//        responseBuffer.readBytes(responseBytes);
 
-        String response = new String(responseBytes,"UTF-8");
+//        String response = new String(responseBytes,"UTF-8");
+        String response = (String) msg;
         System.out.println("接收到服务端的响应："+response);
     }
 
